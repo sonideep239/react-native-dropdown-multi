@@ -1,6 +1,6 @@
 {
-  "name": "Dropdown",
-  "version": "0.0.1",
+  "name": "react-native-dropdown-multi",
+  "version": "1.0.0",
   "private": true,
   "scripts": {
     "android": "react-native run-android",
@@ -35,5 +35,25 @@
   },
   "engines": {
     "node": ">=18"
-  }
+  },
+  "description": "This is a new [**React Native**](https://reactnative.dev) project, bootstrapped using [`@react-native-community/cli`](https://github.com/react-native-community/cli).",
+  "main": "src/CustomDropdown.js",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/sonideep239/react-native-dropdown-multi.git"
+  },
+  "keywords": [
+    "react-native",
+    "dropdown",
+    "multi-select",
+    "component",
+    "react-native-multiselect",
+    "react-native-picker"
+  ],
+  "author": "Deep Soni",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/sonideep239/react-native-dropdown-multi/issues"
+  },
+  "homepage": "https://github.com/sonideep239/react-native-dropdown-multi#readme"
 }
