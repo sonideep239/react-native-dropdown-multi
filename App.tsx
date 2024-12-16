@@ -5,93 +5,66 @@
  * @format
  */
 
-import React from 'react';
-import type {PropsWithChildren} from 'react';
+import React, { useState } from 'react';
 import {
   SafeAreaView,
-  ScrollView,
   StatusBar,
   StyleSheet,
   Text,
-  useColorScheme,
   View,
 } from 'react-native';
-
-import {
-  Colors,
-  DebugInstructions,
-  Header,
-  LearnMoreLinks,
-  ReloadInstructions,
-} from 'react-native/Libraries/NewAppScreen';
-
-type SectionProps = PropsWithChildren<{
-  title: string;
-}>;
-
-function Section({children, title}: SectionProps): React.JSX.Element {
-  const isDarkMode = useColorScheme() === 'dark';
-  return (
-    <View style={styles.sectionContainer}>
-      <Text
-        style={[
-          styles.sectionTitle,
-          {
-            color: isDarkMode ? Colors.white : Colors.black,
-          },
-        ]}>
-        {title}
-      </Text>
-      <Text
-        style={[
-          styles.sectionDescription,
-          {
-            color: isDarkMode ? Colors.light : Colors.dark,
-          },
-        ]}>
-        {children}
-      </Text>
-    </View>
-  );
-}
+import { Colors } from 'react-native/Libraries/NewAppScreen';
+import CustomDropdown from './src/CustomDropdown';
 
 function App(): React.JSX.Element {
-  const isDarkMode = useColorScheme() === 'dark';
+  const [selectedEmployee, setSelectedEmployee] = useState({ label: '', value: '' });
+  const [selectedEmployees, setSelectedEmployees] = useState([]);
+  const [isReportForVisible, setIsReportForVisible] = useState(false);
+  const [isAssignVisible, setIsAssignVisible] = useState(false);
 
-  const backgroundStyle = {
-    backgroundColor: isDarkMode ? Colors.darker : Colors.lighter,
+  const backgroundStyle = { backgroundColor: Colors.lighter };
+
+  const employees = Array.from({ length: 100 }, (_, i) => ({
+    label: `Employee ${i + 1}`,
+    value: i + 1,
+  }));
+
+  const toggleReportForDropdown = () => setIsReportForVisible(!isReportForVisible);
+  const toggleAssignDropdown = () => setIsAssignVisible(!isAssignVisible);
+
+  const updateAssignedEmployees = (value) => {
+    setSelectedEmployees(value.map((val) => val));
   };
 
   return (
-    <SafeAreaView style={backgroundStyle}>
-      <StatusBar
-        barStyle={isDarkMode ? 'light-content' : 'dark-content'}
-        backgroundColor={backgroundStyle.backgroundColor}
-      />
-      <ScrollView
-        contentInsetAdjustmentBehavior="automatic"
-        style={backgroundStyle}>
-        <Header />
-        <View
-          style={{
-            backgroundColor: isDarkMode ? Colors.black : Colors.white,
-          }}>
-          <Section title="Step One">
-            Edit <Text style={styles.highlight}>App.tsx</Text> to change this
-            screen and then come back to see your edits.
-          </Section>
-          <Section title="See Your Changes">
-            <ReloadInstructions />
-          </Section>
-          <Section title="Debug">
-            <DebugInstructions />
-          </Section>
-          <Section title="Learn More">
-            Read the docs to discover what to do next:
-          </Section>
-          <LearnMoreLinks />
-        </View>
-      </ScrollView>
+    <SafeAreaView style={[backgroundStyle, { flex: 1 }]}>
+      <StatusBar barStyle={'dark-content'} backgroundColor={backgroundStyle.backgroundColor} />
+      <View style={{ padding: 15, gap: 10 }}>
+        <Text>Example 1 </Text>
+        <CustomDropdown
+          isClearable={true}
+          selectedValue={selectedEmployee}
+          isSearchEnabled={true}
+          data={employees}
+          isVisible={isReportForVisible}
+          onClose={toggleReportForDropdown}
+          onSelect={setSelectedEmployee}
+          onPress={toggleReportForDropdown}
+        />
+
+        <Text>Example 2 (Multiselect)</Text>
+        <CustomDropdown
+          isClearable={true}
+          selectedValue={selectedEmployees}
+          isSearchEnabled={true}
+          isMultiSelect={true}
+          data={employees}
+          isVisible={isAssignVisible}
+          onClose={toggleAssignDropdown}
+          onSelect={updateAssignedEmployees}
+          onPress={toggleAssignDropdown}
+        />
+      </View>
     </SafeAreaView>
   );
 }
