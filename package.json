@@ -1,6 +1,6 @@
 {
   "name": "react-native-dropdown-multi",
-  "version": "1.0.5",
+  "version": "1.1.1",
   "scripts": {
     "android": "react-native run-android",
     "ios": "react-native run-ios",
@@ -8,11 +8,7 @@
     "start": "react-native start",
     "test": "jest"
   },
-  "dependencies": {
-    "react": "18.3.1",
-    "react-native": "0.76.5",
-    "react-native-vector-icons": "^10.2.0"
-  },
+  "dependencies": {},
   "devDependencies": {
     "@babel/core": "^7.25.2",
     "@babel/preset-env": "^7.25.3",
@@ -36,7 +32,7 @@
   "engines": {
     "node": ">=18"
   },
-  "description": "This is a new [**React Native**](https://reactnative.dev) project, bootstrapped using [`@react-native-community/cli`](https://github.com/react-native-community/cli).",
+  "description": "A customizable multi-select dropdown component for React Native.",
   "main": "src/CustomDropdown.js",
   "repository": {
     "type": "git",
@@ -55,5 +51,15 @@
   "bugs": {
     "url": "https://github.com/sonideep239/react-native-dropdown-multi/issues"
   },
-  "homepage": "https://github.com/sonideep239/react-native-dropdown-multi#readme"
+  "homepage": "https://github.com/sonideep239/react-native-dropdown-multi#readme",
+  "peerDependencies": {
+    "react": "*",
+    "react-native": "*",
+    "react-native-vector-icons": "*"
+  },
+  "files": [
+    "src",
+    "README.md",
+    "LICENSE"
+  ]
 }

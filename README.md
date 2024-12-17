@@ -1,79 +1,160 @@
-This is a new [**React Native**](https://reactnative.dev) project, bootstrapped using [`@react-native-community/cli`](https://github.com/react-native-community/cli).
+# react-native-dropdown-multi
 
-# Getting Started
+react-native-dropdown-multi is supported on both Android and iOS, making it a versatile solution for cross-platform dropdown functionality in React Native applications. Here's a breakdown of its key features
 
->**Note**: Make sure you have completed the [React Native - Environment Setup](https://reactnative.dev/docs/environment-setup) instructions till "Creating a new application" step, before proceeding.
+### Key Features
 
-## Step 1: Start the Metro Server
+- Multi-Select & Single Select
+- Searchable
+- Customizable Styling
+- Modal Interface
+- Clear Selection Option
+- Cross-Platform
 
-First, you will need to start **Metro**, the JavaScript _bundler_ that ships _with_ React Native.
 
-To start Metro, run the following command from the _root_ of your React Native project:
+## Installation
 
-```bash
-# using npm
-npm start
-
-# OR using Yarn
-yarn start
-```
-
-## Step 2: Start your Application
-
-Let Metro Bundler run in its _own_ terminal. Open a _new_ terminal from the _root_ of your React Native project. Run the following command to start your _Android_ or _iOS_ app:
-
-### For Android
+Use the package manager [npm](https://www.npmjs.com) to install react-native-dropdown-multi.
 
 ```bash
-# using npm
-npm run android
-
-# OR using Yarn
-yarn android
+npm i react-native-dropdown-multi
 ```
-
-### For iOS
-
+OR
 ```bash
-# using npm
-npm run ios
-
-# OR using Yarn
-yarn ios
+yarn add react-native-dropdown-multi
 ```
 
-If everything is set up _correctly_, you should see your new app running in your _Android Emulator_ or _iOS Simulator_ shortly provided you have set up your emulator/simulator correctly.
+## Installation Steps
+The library has specified dedicated steps for each platform. Please follow their installation guide in order to properly use icon fonts.
+```bash
+npm i react-native-vector-icons
+```
 
-This is one way to run your app — you can also run it directly from within Android Studio and Xcode respectively.
+### IOS Installation
+Please refer linked document [react-native-vector-icons](https://www.npmjs.com/package/react-native-vector-icons#ios-setup)
 
-## Step 3: Modifying your App
+### Android Installation
+Please refer linked document [react-native-vector-icons](https://www.npmjs.com/package/react-native-vector-icons#android-setup)
 
-Now that you have successfully run the app, let's modify it.
+## Usage
 
-1. Open `App.tsx` in your text editor of choice and edit some lines.
-2. For **Android**: Press the <kbd>R</kbd> key twice or select **"Reload"** from the **Developer Menu** (<kbd>Ctrl</kbd> + <kbd>M</kbd> (on Window and Linux) or <kbd>Cmd ⌘</kbd> + <kbd>M</kbd> (on macOS)) to see your changes!
+```react-native
+import React, { useState } from 'react';
+import CustomDropdown from 'react-native-dropdown-multi';
 
-   For **iOS**: Hit <kbd>Cmd ⌘</kbd> + <kbd>R</kbd> in your iOS Simulator to reload the app and see your changes!
+const [selectedEmployee, setSelectedEmployee] = useState({ label: '', value: '' });
+const [selectedEmployees, setSelectedEmployees] = useState([]);
+const [isReportForVisible, setIsReportForVisible] = useState(false);
+const [isAssignVisible, setIsAssignVisible] = useState(false);
 
-## Congratulations! :tada:
+const employees = Array.from({ length: 100 }, (_, i) => ({
+    label: `Employee ${i + 1}`,
+    value: i + 1,
+  }));
 
-You've successfully run and modified your React Native App. :partying_face:
+const toggleReportForDropdown = () => setIsReportForVisible(!isReportForVisible);
+const toggleAssignDropdown = () => setIsAssignVisible(!isAssignVisible);
 
-### Now what?
+const updateAssignedEmployees = (value) => {
+    setSelectedEmployees(value.map((val) => val));
+};
 
-- If you want to add this new React Native code to an existing application, check out the [Integration guide](https://reactnative.dev/docs/integration-with-existing-apps).
-- If you're curious to learn more about React Native, check out the [Introduction to React Native](https://reactnative.dev/docs/getting-started).
+<View style={{ padding: 15, gap: 10 }}>
+        <Text>Example 1 </Text>
+        <CustomDropdown
+          isClearable={true}
+          selectedValue={selectedEmployee}
+          isSearchEnabled={true}
+          data={employees}
+          isVisible={isReportForVisible}
+          onClose={toggleReportForDropdown}
+          onSelect={setSelectedEmployee}
+          onPress={toggleReportForDropdown}
+          customStyles={{
+            pickerWrapper: { borderColor: 'blue' },
+            itemText: { color: 'darkblue' },
+            buttonText: { color: 'white', fontWeight: 'bold' },
+          }}
+          customButtonLabels={{ submit: 'Confirm', close: 'Cancel' }}
+          dropdownHeight={500}
+          searchPlaceholder="Type to search..."
+          loading={false}
+        />
 
-# Troubleshooting
+        <Text>Example 2 (Multiselect)</Text>
+        <CustomDropdown
+          isClearable={true}
+          selectedValue={selectedEmployees}
+          isSearchEnabled={true}
+          isMultiSelect={true}
+          data={employees}
+          isVisible={isAssignVisible}
+          onClose={toggleAssignDropdown}
+          onSelect={updateAssignedEmployees}
+          onPress={toggleAssignDropdown}
+        />
+</View>
+```
 
-If you can't get this to work, see the [Troubleshooting](https://reactnative.dev/docs/troubleshooting) page.
 
-# Learn More
 
-To learn more about React Native, take a look at the following resources:
+## Props & Styling
+#### Props 
+Certainly! Below is a table summarizing all the props, their types, whether they are required, and default values (if applicable). Additionally, I'll include the corresponding styling properties for each prop:
 
-- [React Native Website](https://reactnative.dev) - learn more about React Native.
-- [Getting Started](https://reactnative.dev/docs/environment-setup) - an **overview** of React Native and how setup your environment.
-- [Learn the Basics](https://reactnative.dev/docs/getting-started) - a **guided tour** of the React Native **basics**.
-- [Blog](https://reactnative.dev/blog) - read the latest official React Native **Blog** posts.
-- [`@facebook/react-native`](https://github.com/facebook/react-native) - the Open Source; GitHub **repository** for React Native.
+| **Prop**                | **Type**              | **Description**                                                                                                        | **Required** | **Default Value**                              |
+|-------------------------|-----------------------|------------------------------------------------------------------------------------------------------------------------|--------------|------------------------------------------------|
+| `data`                  | `Array<Object>`       | The data array to populate the dropdown. Each object must have a `value` and `label` property.                          | Yes          | **Required.** No default value.                |
+| `isVisible`             | `boolean`             | Controls whether the dropdown modal is visible or not.                                                                  | Yes          | **Required.** No default value.                |
+| `onClose`               | `Function`            | A function to handle closing the dropdown.                                                                                | Yes          | **Required.** No default value.                |
+| `onSelect`              | `Function`            | A function to handle item selection. Receives the selected item or items.                                               | Yes          | **Required.** No default value.                |
+| `isSearchEnabled`       | `boolean`             | If `true`, the search bar will be enabled in the dropdown.                                                                | No           | `false`                                        |
+| `selectedValue`         | `Object`              | The initially selected item. The object should have a `value` and `label`.                                               | No           | `{}` (empty object)                            |
+| `onPress`               | `Function`            | A function to be called when the dropdown is pressed (to open the modal).                                                | Yes          | **Required.** No default value.                |
+| `isClearable`           | `boolean`             | If `true`, a clear icon will be displayed to clear the selection.                                                        | No           | `false`                                        |
+| `placeholder`           | `string`              | Placeholder text for the dropdown input when no item is selected.                                                       | No           | `"Select an item"`                             |
+| `isMultiSelect`         | `boolean`             | If `true`, the dropdown will allow multiple selections.                                                                  | No           | `false`                                        |
+| `customStyles`          | `Object`              | A set of custom styles to override default styles. Custom styles can include `pickerWrapper`, `item`, `modalContainer`, and more. | No           | `{}` (empty object)                            |
+| `customButtonLabels`    | `Object`              | Custom labels for the buttons. Supports `submit` and `close`.                                                             | No           | `{ submit: "Submit", close: "Close" }`          |
+| `customIcons`           | `Object`              | Custom icons for the dropdown button and clear icon. Supports `dropdown` and `clear`.                                    | No           | `{ dropdown: <FontAwesomeIcon>, clear: <FontAwesomeIcon> }` |
+| `dropdownHeight`        | `number`              | Defines the height of the dropdown modal.                                                                                 | No           | `height * 0.7`                                  |
+| `searchPlaceholder`     | `string`              | Placeholder text for the search input.                                                                                   | No           | `"Search..."`                                   |
+| `loading`               | `boolean`             | If `true`, a loading indicator will be shown instead of the dropdown items.                                               | No           | `false`                                        |
+
+#### Custom Styles (for the customStyles prop)
+Here are the available custom styles that can be passed within the customStyles prop:
+
+| **Prop**                | **Type**              | **Description**                                                                                                        | **Required** | **Default Value**                              |
+|-------------------------|-----------------------|------------------------------------------------------------------------------------------------------------------------|--------------|------------------------------------------------|
+| `pickerWrapper`         | `Object`              | Custom styles for the wrapper of the dropdown input. This affects the overall outer container of the dropdown.          | No           | `{}` (empty object)                            |
+| `contentWrapper`        | `Object`              | Custom styles for the wrapper inside the dropdown input, usually for the layout (row, alignment, etc.).                 | No           | `{}` (empty object)                            |
+| `item`                  | `Object`              | Custom styles for individual dropdown items (each option). Can adjust padding, borders, etc.                           | No           | `{}` (empty object)                            |
+| `itemText`              | `Object`              | Custom styles for the text inside each dropdown item.                                                                  | No           | `{}` (empty object)                            |
+| `selectedColor`         | `string`              | The color applied to the item circle when it's selected.                                                               | No           | `'green'`                                      |
+| `selectedTextColor`     | `string`              | Custom text color for selected items (multi-select).                                                                   | No           | `'black'`                                      |
+| `modalContainer`        | `Object`              | Custom styles for the outer container of the dropdown modal.                                                           | No           | `{}` (empty object)                            |
+| `modalView`             | `Object`              | Custom styles for the modal view, where the dropdown list and buttons reside.                                           | No           | `{}` (empty object)                            |
+| `searchContainer`       | `Object`              | Custom styles for the search bar container inside the dropdown modal.                                                  | No           | `{}` (empty object)                            |
+| `searchInput`           | `Object`              | Custom styles for the text input inside the search bar of the dropdown modal.                                           | No           | `{}` (empty object)                            |
+| `clearButton`           | `Object`              | Custom styles for the clear button (appears when the search input is not empty).                                        | No           | `{}` (empty object)                            |
+| `buttonContainer`       | `Object`              | Custom styles for the container holding the submit and close buttons.                                                  | No           | `{}` (empty object)                            |
+| `button`                | `Object`              | Custom styles for the individual buttons (submit or close).                                                            | No           | `{}` (empty object)                            |
+| `buttonText`            | `Object`              | Custom styles for the text inside the submit and close buttons.                                                       | No           | `{}` (empty object)                            |
+| `multiselectText`       | `Object`              | Custom styles for the text inside the multi-select dropdown (when multiple items are selected).                        | No           | `{}` (empty object)                            |
+| `placeholderText`       | `Object`              | Custom styles for the placeholder text when no item is selected in the dropdown.                                       | No           | `{}` (empty object)                            |
+| `clearIcon`             | `Object`              | Custom styles for the clear icon (for clearing the selection).                                                         | No           | `{}` (empty object)                            |
+| `dropdownIcon`          | `Object`              | Custom styles for the dropdown icon (the arrow indicator).                                                             | No           | `{}` (empty object)                            |
+| `loadingContainer`      | `Object`              | Custom styles for the loading spinner container when the dropdown is in a loading state.                               | No           | `{}` (empty object)                            |
+| `emptyListText`         | `Object`              | Custom styles for the "No data found" text when the filtered list is empty.                                           | No           | `{}` (empty object)                            |
+
+
+## Contributing
+
+Pull requests are welcome. For major changes, please open an issue first
+to discuss what you would like to change.
+
+Please make sure to update tests as appropriate.
+
+## License
+
+[MIT](https://choosealicense.com/licenses/mit/)

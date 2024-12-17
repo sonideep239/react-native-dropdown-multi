@@ -7,7 +7,7 @@ import {
     TouchableOpacity,
     TextInput,
     StyleSheet,
-    Dimensions
+    Dimensions,
 } from 'react-native';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
@@ -25,6 +25,12 @@ const CustomDropdown = React.memo(({
     isClearable = false,
     placeholder = 'Select an item',
     isMultiSelect = false,
+    customStyles = {},
+    customButtonLabels = {},
+    customIcons = {},
+    dropdownHeight = height * 0.7,
+    searchPlaceholder = 'Search...',
+    loading = false,
 }) => {
     const [searchQuery, setSearchQuery] = useState('');
     const [selectedItems, setSelectedItems] = useState([]);
@@ -75,15 +81,15 @@ const CustomDropdown = React.memo(({
 
         return (
             <TouchableOpacity onPress={() => handleSelectItem(item)}>
-                <View style={styles.item}>
+                <View style={[styles.item, customStyles.item]}>
                     <View style={[
                         styles.circle,
                         {
-                            backgroundColor: isSelected ? 'green' : 'white',
-                            borderColor: isSelected ? 'green' : 'gray',
+                            backgroundColor: isSelected ? (customStyles.selectedColor || 'green') : 'white',
+                            borderColor: isSelected ? (customStyles.selectedColor || 'green') : 'gray',
                         },
                     ]} />
-                    <Text style={styles.itemText}>{item.label}</Text>
+                    <Text style={[styles.itemText, customStyles.itemText]}>{item.label}</Text>
                 </View>
             </TouchableOpacity>
         );
@@ -92,21 +98,21 @@ const CustomDropdown = React.memo(({
     const renderSelected = () => {
         if (isMultiSelect) {
             return selectedItems.length > 0 ? (
-                <Text numberOfLines={1} style={styles.multiselectText}>
+                <Text numberOfLines={1} style={[styles.multiselectText, customStyles.multiselectText]}>
                     {selectedItems.map(item => item.label).join(', ')}
                 </Text>
             ) : (
-                <Text style={styles.placeholderText}>
+                <Text style={[styles.placeholderText, customStyles.placeholderText]}>
                     {placeholder}
                 </Text>
             );
         } else {
             return selectedValue?.value ? (
-                <Text numberOfLines={1} style={styles.selectedText}>
+                <Text numberOfLines={1} style={[styles.selectedText, customStyles.selectedText]}>
                     {selectedValue.label}
                 </Text>
             ) : (
-                <Text style={styles.placeholderText}>
+                <Text style={[styles.placeholderText, customStyles.placeholderText]}>
                     {placeholder}
                 </Text>
             );
@@ -116,10 +122,10 @@ const CustomDropdown = React.memo(({
     return (
         <TouchableOpacity
             disabled={isVisible}
-            style={styles.pickerWrapper}
+            style={[styles.pickerWrapper, customStyles.pickerWrapper]}
             onPress={onPress}
         >
-            <View style={styles.contentWrapper}>
+            <View style={[styles.contentWrapper, customStyles.contentWrapper]}>
                 {isVisible ? (
                     <Modal
                         animationType="fade"
@@ -127,14 +133,14 @@ const CustomDropdown = React.memo(({
                         visible={isVisible}
                         onRequestClose={onClose}
                     >
-                        <View style={styles.modalContainer}>
-                            <View style={styles.modalView}>
+                        <View style={[styles.modalContainer, customStyles.modalContainer]}>
+                            <View style={[styles.modalView, customStyles.modalView, { height: dropdownHeight }]}>
                                 {isSearchEnabled && (
-                                    <View style={styles.searchContainer}>
+                                    <View style={[styles.searchContainer, customStyles.searchContainer]}>
                                         <TextInput
                                             placeholderTextColor="gray"
-                                            style={styles.searchInput}
-                                            placeholder="Search"
+                                            style={[styles.searchInput, customStyles.searchInput]}
+                                            placeholder={searchPlaceholder}
                                             value={searchQuery}
                                             onChangeText={setSearchQuery}
                                         />
@@ -145,30 +151,40 @@ const CustomDropdown = React.memo(({
                                         )}
                                     </View>
                                 )}
-                                <FlatList
-                                    keyboardShouldPersistTaps="handled"
-                                    data={filteredData}
-                                    ListEmptyComponent={() => (
-                                        <Text style={styles.emptyListText}>No data found!</Text>
-                                    )}
-                                    keyExtractor={item => item.id || item.value}
-                                    renderItem={renderItem}
-                                    getItemLayout={(data, index) => ({
-                                        length: 50,
-                                        offset: 50 * index,
-                                        index,
-                                    })}
-                                />
+                                {loading ? (
+                                    <View style={styles.loadingContainer}>
+                                        <MaterialIcons name="loop" size={30} color="gray" />
+                                    </View>
+                                ) : (
+                                    <FlatList
+                                        keyboardShouldPersistTaps="handled"
+                                        data={filteredData}
+                                        ListEmptyComponent={() => (
+                                            <Text style={[styles.emptyListText, customStyles.emptyListText]}>
+                                                No data found!
+                                            </Text>
+                                        )}
+                                        keyExtractor={item => item.id || item.value}
+                                        renderItem={renderItem}
+                                        getItemLayout={(data, index) => ({
+                                            length: 50,
+                                            offset: 50 * index,
+                                            index,
+                                        })}
+                                    />
+                                )}
                                 <View style={styles.buttonContainer}>
                                     <TouchableOpacity
-                                        style={[styles.button, { backgroundColor: 'gray' }]}
+                                        style={[styles.button, { backgroundColor: 'gray' }, customStyles.closeButton]}
                                         onPress={onClose}
                                     >
-                                        <Text style={styles.buttonText}>Close</Text>
+                                        <Text style={[styles.buttonText, customStyles.buttonText]}>
+                                            {customButtonLabels.close || 'Close'}
+                                        </Text>
                                     </TouchableOpacity>
                                     {(isMultiSelect ? selectedItems.length > 0 : selectedValue?.value) && (
                                         <TouchableOpacity
-                                            style={[styles.button, { backgroundColor: 'green' }]}
+                                            style={[styles.button, { backgroundColor: 'green' }, customStyles.submitButton]}
                                             onPress={() => {
                                                 if (isMultiSelect) {
                                                     onSelect(selectedItems);
@@ -178,10 +194,11 @@ const CustomDropdown = React.memo(({
                                                 onClose();
                                             }}
                                         >
-                                            <Text style={styles.buttonText}>Submit</Text>
+                                            <Text style={[styles.buttonText, customStyles.buttonText]}>
+                                                {customButtonLabels.submit || 'Submit'}
+                                            </Text>
                                         </TouchableOpacity>
                                     )}
-
                                 </View>
                             </View>
                         </View>
@@ -190,12 +207,12 @@ const CustomDropdown = React.memo(({
                     renderSelected()
                 )}
                 {(isMultiSelect ? selectedItems.length > 0 : selectedValue?.value) && isClearable ? (
-                    <TouchableOpacity onPress={handleClearSelection} style={styles.clearIcon}>
+                    <TouchableOpacity onPress={handleClearSelection} style={[styles.clearIcon, customStyles.clearIcon]}>
                         <FontAwesome name="times" size={16} color="red" />
                     </TouchableOpacity>
                 ) : (
-                    <TouchableOpacity style={styles.dropdownIcon}>
-                        <FontAwesome name="caret-down" size={16} color="black" />
+                    <TouchableOpacity style={[styles.dropdownIcon, customStyles.dropdownIcon]}>
+                        {customIcons?.dropdown || <FontAwesome name="caret-down" size={16} color="black" />}
                     </TouchableOpacity>
                 )}
             </View>
@@ -210,8 +227,6 @@ const styles = StyleSheet.create({
         backgroundColor: 'rgba(0, 0, 0, 0.5)',
     },
     modalView: {
-        flex: 1,
-        maxHeight: '80%',
         marginHorizontal: 20,
         backgroundColor: 'white',
         borderRadius: 10,
@@ -313,6 +328,11 @@ const styles = StyleSheet.create({
         position: 'absolute',
         right: 0,
         padding: 5,
+    },
+    loadingContainer: {
+        justifyContent: 'center',
+        alignItems: 'center',
+        padding: 20,
     },
 });
 
