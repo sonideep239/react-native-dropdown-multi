@@ -1,6 +1,6 @@
 {
   "name": "react-native-dropdown-multi",
-  "version": "1.1.2",
+  "version": "1.1.3",
   "scripts": {
     "android": "react-native run-android",
     "ios": "react-native run-ios",
