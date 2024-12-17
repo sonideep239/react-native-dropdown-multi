@@ -12,6 +12,13 @@ react-native-dropdown-multi is supported on both Android and iOS, making it a ve
 - Cross-Platform
 
 
+## Screenshots
+
+![App Screenshot](https://github.com/sonideep239/react-native-dropdown-multi/blob/main/src/assets/1.png)
+![App Screenshot](https://github.com/sonideep239/react-native-dropdown-multi/blob/main/src/assets/2.png)
+![App Screenshot](https://github.com/sonideep239/react-native-dropdown-multi/blob/main/src/assets/3.png)
+![App Screenshot](https://github.com/sonideep239/react-native-dropdown-multi/blob/main/src/assets/4.png)
+
 ## Installation
 
 Use the package manager [npm](https://www.npmjs.com) to install react-native-dropdown-multi.
