@@ -18,7 +18,7 @@ react-native-dropdown-multi is supported on both Android and iOS, making it a ve
     <img src="https://github.com/sonideep239/react-native-dropdown-multi/blob/main/src/assets/1.png" width="230" alt="App Screenshot" />
     <img src="https://github.com/sonideep239/react-native-dropdown-multi/blob/main/src/assets/2.png" width="230" alt="App Screenshot" />
     <img src="https://github.com/sonideep239/react-native-dropdown-multi/blob/main/src/assets/3.png" width="230" alt="App Screenshot" />
-  <img src="https://github.com/sonideep239/react-native-dropdown-multi/blob/main/src/assets/4.png" width="230" alt="App Screenshot" 
+  <img src="https://github.com/sonideep239/react-native-dropdown-multi/blob/main/src/assets/4.png" width="230" alt="App Screenshot" />
 </div>
 
 

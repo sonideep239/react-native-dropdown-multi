@@ -50,15 +50,6 @@ function App(): React.JSX.Element {
           onClose={toggleReportForDropdown}
           onSelect={setSelectedEmployee}
           onPress={toggleReportForDropdown}
-          customStyles={{
-            pickerWrapper: { borderColor: 'blue' },
-            itemText: { color: 'darkblue' },
-            buttonText: { color: 'white', fontWeight: 'bold' },
-          }}
-          customButtonLabels={{ submit: 'Confirm', close: 'Cancel' }}
-          dropdownHeight={500}
-          searchPlaceholder="Type to search..."
-          loading={false}
         />
 
         <Text>Example 2 (Multiselect)</Text>
