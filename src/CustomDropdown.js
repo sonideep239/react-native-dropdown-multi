@@ -127,82 +127,85 @@ const CustomDropdown = React.memo(({
         >
             <View style={[styles.contentWrapper, customStyles.contentWrapper]}>
                 {isVisible ? (
-                    <Modal
-                        animationType="fade"
-                        transparent
-                        visible={isVisible}
-                        onRequestClose={onClose}
-                    >
-                        <View style={[styles.modalContainer, customStyles.modalContainer]}>
-                            <View style={[styles.modalView, customStyles.modalView, { height: dropdownHeight }]}>
-                                {isSearchEnabled && (
-                                    <View style={[styles.searchContainer, customStyles.searchContainer]}>
-                                        <TextInput
-                                            placeholderTextColor="gray"
-                                            style={[styles.searchInput, customStyles.searchInput]}
-                                            placeholder={searchPlaceholder}
-                                            value={searchQuery}
-                                            onChangeText={setSearchQuery}
+                    <View>
+                        <Modal
+                            animationType="fade"
+                            transparent
+                            visible={isVisible}
+                            onRequestClose={onClose}
+                        >
+                            <View style={[styles.modalContainer, customStyles.modalContainer]}>
+                                <View style={[styles.modalView, customStyles.modalView, { height: dropdownHeight }]}>
+                                    {isSearchEnabled && (
+                                        <View style={[styles.searchContainer, customStyles.searchContainer]}>
+                                            <TextInput
+                                                placeholderTextColor="gray"
+                                                style={[styles.searchInput, customStyles.searchInput]}
+                                                placeholder={searchPlaceholder}
+                                                value={searchQuery}
+                                                onChangeText={setSearchQuery}
+                                            />
+                                            {searchQuery && (
+                                                <TouchableOpacity onPress={clearSearch} style={styles.clearButton}>
+                                                    <MaterialIcons name="clear" size={20} color="red" />
+                                                </TouchableOpacity>
+                                            )}
+                                        </View>
+                                    )}
+                                    {loading ? (
+                                        <View style={styles.loadingContainer}>
+                                            <MaterialIcons name="loop" size={30} color="gray" />
+                                        </View>
+                                    ) : (
+                                        <FlatList
+                                            keyboardShouldPersistTaps="handled"
+                                            data={filteredData}
+                                            ListEmptyComponent={() => (
+                                                <Text style={[styles.emptyListText, customStyles.emptyListText]}>
+                                                    No data found!
+                                                </Text>
+                                            )}
+                                            keyExtractor={item => item.id || item.value}
+                                            renderItem={renderItem}
+                                            getItemLayout={(data, index) => ({
+                                                length: 50,
+                                                offset: 50 * index,
+                                                index,
+                                            })}
                                         />
-                                        {searchQuery && (
-                                            <TouchableOpacity onPress={clearSearch} style={styles.clearButton}>
-                                                <MaterialIcons name="clear" size={20} color="red" />
+                                    )}
+                                    <View style={styles.buttonContainer}>
+                                        <TouchableOpacity
+                                            style={[styles.button, { backgroundColor: 'gray' }, customStyles.closeButton]}
+                                            onPress={onClose}
+                                        >
+                                            <Text style={[styles.buttonText, customStyles.buttonText]}>
+                                                {customButtonLabels.close || 'Close'}
+                                            </Text>
+                                        </TouchableOpacity>
+                                        {(isMultiSelect ? selectedItems.length > 0 : selectedValue?.value) && (
+                                            <TouchableOpacity
+                                                style={[styles.button, { backgroundColor: 'green' }, customStyles.submitButton]}
+                                                onPress={() => {
+                                                    if (isMultiSelect) {
+                                                        onSelect(selectedItems);
+                                                    } else {
+                                                        onSelect(selectedValue);
+                                                    }
+                                                    onClose();
+                                                }}
+                                            >
+                                                <Text style={[styles.buttonText, customStyles.buttonText]}>
+                                                    {customButtonLabels.submit || 'Submit'}
+                                                </Text>
                                             </TouchableOpacity>
                                         )}
                                     </View>
-                                )}
-                                {loading ? (
-                                    <View style={styles.loadingContainer}>
-                                        <MaterialIcons name="loop" size={30} color="gray" />
-                                    </View>
-                                ) : (
-                                    <FlatList
-                                        keyboardShouldPersistTaps="handled"
-                                        data={filteredData}
-                                        ListEmptyComponent={() => (
-                                            <Text style={[styles.emptyListText, customStyles.emptyListText]}>
-                                                No data found!
-                                            </Text>
-                                        )}
-                                        keyExtractor={item => item.id || item.value}
-                                        renderItem={renderItem}
-                                        getItemLayout={(data, index) => ({
-                                            length: 50,
-                                            offset: 50 * index,
-                                            index,
-                                        })}
-                                    />
-                                )}
-                                <View style={styles.buttonContainer}>
-                                    <TouchableOpacity
-                                        style={[styles.button, { backgroundColor: 'gray' }, customStyles.closeButton]}
-                                        onPress={onClose}
-                                    >
-                                        <Text style={[styles.buttonText, customStyles.buttonText]}>
-                                            {customButtonLabels.close || 'Close'}
-                                        </Text>
-                                    </TouchableOpacity>
-                                    {(isMultiSelect ? selectedItems.length > 0 : selectedValue?.value) && (
-                                        <TouchableOpacity
-                                            style={[styles.button, { backgroundColor: 'green' }, customStyles.submitButton]}
-                                            onPress={() => {
-                                                if (isMultiSelect) {
-                                                    onSelect(selectedItems);
-                                                } else {
-                                                    onSelect(selectedValue);
-                                                }
-                                                onClose();
-                                            }}
-                                        >
-                                            <Text style={[styles.buttonText, customStyles.buttonText]}>
-                                                {customButtonLabels.submit || 'Submit'}
-                                            </Text>
-                                        </TouchableOpacity>
-                                    )}
                                 </View>
                             </View>
-                        </View>
-                    </Modal>
+                        </Modal>
+                        {renderSelected()}
+                    </View>
                 ) : (
                     renderSelected()
                 )}
